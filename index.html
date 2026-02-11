@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Habla con Daniel Cardona AI</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#121a33;
+      --text:#f3f6ff;
+      --muted:#b9c3e6;
+      --accent:#6ea8fe;
+      --ok:#1f9d55;
+      --warn:#d69e2e;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:linear-gradient(180deg,#0b1020 0%, #0f1730 100%);
+      color:var(--text);
+    }
+    .wrap{
+      max-width:900px;
+      margin:32px auto;
+      padding:16px;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:20px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+    h1{
+      margin:0 0 8px 0;
+      font-size:28px;
+      line-height:1.2;
+    }
+    .sub{
+      margin:0 0 18px 0;
+      color:var(--muted);
+      font-size:16px;
+    }
+    .notice{
+      background:rgba(110,168,254,.12);
+      border:1px solid rgba(110,168,254,.35);
+      color:#dbe8ff;
+      padding:12px 14px;
+      border-radius:12px;
+      margin-bottom:14px;
+      font-size:14px;
+    }
+    .btn{
+      appearance:none;
+      border:none;
+      background:var(--accent);
+      color:#081027;
+      font-weight:700;
+      padding:12px 16px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:15px;
+    }
+    .btn:disabled{
+      opacity:.65;
+      cursor:not-allowed;
+    }
+    .status{
+      margin-top:10px;
+      font-size:14px;
+      color:var(--muted);
+    }
+    .status.ok{ color:#9ae6b4; }
+    .status.warn{ color:#f6e05e; }
+    .widget{
+      margin-top:18px;
+      min-height:120px;
+      border:1px dashed rgba(255,255,255,.2);
+      border-radius:12px;
+      padding:12px;
+      background:rgba(255,255,255,.02);
+    }
+    .fallback{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
+    a{ color:#9ec1ff; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <h1>Habla con Daniel Cardona AI</h1>
+      <p class="sub">Asesoría financiera asistida por IA</p>
+
+      <div class="notice">
+        Para usar la conversación por voz, permite acceso al micrófono.
+      </div>
+
+      <button id="enableMicBtn" class="btn">Activar micrófono</button>
+      <div id="status" class="status">Esperando activación de micrófono...</div>
+
+      <div class="widget">
+        <elevenlabs-convai agent-id="agent_7401kgj5t5khfbpt63b2f4btdbez"></elevenlabs-convai>
+      </div>
+
+      <p class="fallback">
+        Si el micrófono no funciona, abre esta página en Chrome o Safari y revisa permisos del sitio.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    const btn = document.getElementById('enableMicBtn');
+    const statusEl = document.getElementById('status');
+
+    async function requestMicPermission() {
+      try {
+        statusEl.textContent = 'Solicitando permiso de micrófono...';
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        stream.getTracks().forEach(t => t.stop());
+        statusEl.textContent = 'Micrófono habilitado. Ya puedes hablar con el asistente.';
+        statusEl.classList.remove('warn');
+        statusEl.classList.add('ok');
+        btn.disabled = true;
+      } catch (err) {
+        statusEl.textContent = 'Permiso denegado o bloqueado. Revisa permisos del navegador para este sitio.';
+        statusEl.classList.remove('ok');
+        statusEl.classList.add('warn');
+        console.error(err);
+      }
+    }
+
+    btn.addEventListener('click', requestMicPermission);
+  </script>
+
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+</body>
+</html>
