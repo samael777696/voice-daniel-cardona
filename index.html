@@ -89,6 +89,45 @@
       line-height:1.45;
     }
     a{ color:#9ec1ff; }
+.tabs{
+    display:flex;
+    gap:10px;
+    margin:14px 0 10px 0;
+    flex-wrap:wrap;
+  }
+  .tabbtn{
+    appearance:none;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.04);
+    color:var(--text);
+    font-weight:700;
+    padding:10px 12px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:14px;
+  }
+  .tabbtn.active{
+    background:rgba(110,168,254,.18);
+    border-color:rgba(110,168,254,.55);
+  }
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+  .iframeWrap{
+    margin-top:10px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:12px;
+    overflow:hidden;
+    background:rgba(0,0,0,.15);
+  }
+  .iframeWrap iframe{
+    width:100%;
+    height:720px;
+    border:0;
+    display:block;
+  }
+  @media (max-width: 700px){
+    .iframeWrap iframe{ height: 640px; }
+  }
   </style>
 </head>
 <body>
@@ -104,9 +143,41 @@
       <button id="enableMicBtn" class="btn">Activar micrófono</button>
       <div id="status" class="status">Esperando activación de micrófono...</div>
 
-      <div class="widget">
-        <elevenlabs-convai agent-id="agent_8701khp52b3dfsp9t1p2dhf93j2a"></elevenlabs-convai>
-      </div>
+      <div class="tabs">
+  <button id="tabDaniel" class="tabbtn active" type="button">Hablar con Daniel (Ventas)</button>
+  <button id="tabCoach" class="tabbtn" type="button">Sales Simulator Coach (Roleplay)</button>
+</div>
+
+<div id="panelDaniel" class="panel active">
+  <div class="widget">
+    <elevenlabs-convai agent-id="agent_8701khp52b3dfsp9t1p2dhf93j2a"></elevenlabs-convai>
+  </div>
+</div>
+
+<div id="panelCoach" class="panel">
+  <div class="notice">
+    Este simulador abre el roleplay de Prudential para entrenar agentes. Si no carga embebido, usa 
+el botón para abrirlo.
+  </div>
+
+  <button class="btn" type="button" id="openCoachBtn">
+    Abrir simulador en nueva pestaña
+  </button>
+
+  <div class="iframeWrap" style="margin-top:12px;">
+    <iframe
+      id="coachFrame"
+      src="https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20"
+      allow="microphone; autoplay; clipboard-read; clipboard-write"
+      referrerpolicy="no-referrer"
+    ></iframe>
+  </div>
+
+  <div class="fallback">
+    Si ves pantalla en blanco o error, Google puede estar bloqueando el embed. En ese caso usa 
+“Abrir simulador”.
+  </div>
+</div>
 
       <p class="fallback">
         Si el micrófono no funciona, abre esta página en Chrome o Safari y revisa permisos del sitio.
@@ -136,8 +207,37 @@
     }
 
     btn.addEventListener('click', requestMicPermission);
-  </script>
+<script>
+  const coachUrl = "https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20";
 
+  const tabDaniel = document.getElementById("tabDaniel");
+  const tabCoach = document.getElementById("tabCoach");
+  const panelDaniel = document.getElementById("panelDaniel");
+  const panelCoach = document.getElementById("panelCoach");
+  const openCoachBtn = document.getElementById("openCoachBtn");
+  const coachFrame = document.getElementById("coachFrame");
+
+  function activateTab(which){
+    const isDaniel = which === "daniel";
+    tabDaniel.classList.toggle("active", isDaniel);
+    tabCoach.classList.toggle("active", !isDaniel);
+    panelDaniel.classList.toggle("active", isDaniel);
+    panelCoach.classList.toggle("active", !isDaniel);
+
+    // Carga lazy del iframe solo cuando se abre el tab Coach (evita bloquear carga inicial)
+    if(!isDaniel && coachFrame && (!coachFrame.getAttribute("src") || 
+coachFrame.getAttribute("src")==="
+https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20")){
+      coachFrame.setAttribute("src", coachUrl);
+    }
+  }
+
+  tabDaniel?.addEventListener("click", () => activateTab("daniel"));
+  tabCoach?.addEventListener("click", () => activateTab("coach"));
+
+  openCoachBtn?.addEventListener("click", () => window.open(coachUrl, "_blank", 
+"noopener,noreferrer"));
+</script>
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 </body>
 </html>
