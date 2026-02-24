@@ -208,7 +208,43 @@ el botón para abrirlo.
 
     btn.addEventListener('click', requestMicPermission);
 <script>
-  const coachUrl = "https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20";
+  // =========================
+  // 1) Mic permission button
+  // =========================
+  const btn = document.getElementById("enableMicBtn");
+  const statusEl = document.getElementById("status");
+
+  async function requestMicPermission() {
+    try {
+      if (!statusEl) return;
+      statusEl.textContent = "Solicitando permiso de micrófono...";
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true 
+});
+      stream.getTracks().forEach((t) => t.stop());
+      statusEl.textContent = "Micrófono habilitado. Ya puedes hablar con el 
+asistente.";
+      statusEl.classList.remove("warn");
+      statusEl.classList.add("ok");
+      if (btn) btn.disabled = true;
+    } catch (err) {
+      if (statusEl) {
+        statusEl.textContent =
+          "Permiso denegado o bloqueado. Revisa permisos del navegador para 
+este sitio.";
+        statusEl.classList.remove("ok");
+        statusEl.classList.add("warn");
+      }
+      console.error(err);
+    }
+  }
+
+  if (btn) btn.addEventListener("click", requestMicPermission);
+
+  // =========================
+  // 2) Tabs + Coach link/iframe
+  // =========================
+  const coachUrl = 
+"https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20";
 
   const tabDaniel = document.getElementById("tabDaniel");
   const tabCoach = document.getElementById("tabCoach");
@@ -217,27 +253,38 @@ el botón para abrirlo.
   const openCoachBtn = document.getElementById("openCoachBtn");
   const coachFrame = document.getElementById("coachFrame");
 
-  function activateTab(which){
+  function setActiveTab(which) {
     const isDaniel = which === "daniel";
-    tabDaniel.classList.toggle("active", isDaniel);
-    tabCoach.classList.toggle("active", !isDaniel);
-    panelDaniel.classList.toggle("active", isDaniel);
-    panelCoach.classList.toggle("active", !isDaniel);
 
-    // Carga lazy del iframe solo cuando se abre el tab Coach (evita bloquear carga inicial)
-    if(!isDaniel && coachFrame && (!coachFrame.getAttribute("src") || 
-coachFrame.getAttribute("src")==="
-https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20")){
-      coachFrame.setAttribute("src", coachUrl);
+    if (tabDaniel) tabDaniel.classList.toggle("active", isDaniel);
+    if (tabCoach) tabCoach.classList.toggle("active", !isDaniel);
+    if (panelDaniel) panelDaniel.classList.toggle("active", isDaniel);
+    if (panelCoach) panelCoach.classList.toggle("active", !isDaniel);
+
+    // Lazy-load del iframe solo al abrir Coach
+    if (!isDaniel && coachFrame) {
+      const current = coachFrame.getAttribute("src") || "";
+      if (!current || current === "about:blank") 
+coachFrame.setAttribute("src", coachUrl);
     }
   }
 
-  tabDaniel?.addEventListener("click", () => activateTab("daniel"));
-  tabCoach?.addEventListener("click", () => activateTab("coach"));
+  if (tabDaniel) tabDaniel.addEventListener("click", () => 
+setActiveTab("daniel"));
+  if (tabCoach) tabCoach.addEventListener("click", () => 
+setActiveTab("coach"));
 
-  openCoachBtn?.addEventListener("click", () => window.open(coachUrl, "_blank", 
-"noopener,noreferrer"));
+  if (openCoachBtn) {
+    openCoachBtn.addEventListener("click", () => {
+      window.open(coachUrl, "_blank", "noopener,noreferrer");
+    });
+  }
+
+  // Estado inicial
+  setActiveTab("daniel");
 </script>
-  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async 
+type="text/javascript"></script>
 </body>
 </html>
