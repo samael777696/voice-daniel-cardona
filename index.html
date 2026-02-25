@@ -119,33 +119,12 @@
 
       <div class="tabs">
         <button id="tabDaniel" class="tabbtn active" type="button">Hablar con Daniel (Ventas)</button>
-        <button id="tabCoach" class="tabbtn" type="button">Sales Simulator Coach (Roleplay)</button>
+        <a id="tabCoach" class="tabbtn" href="https://aistudio.google.com/apps/847ec397-85e5-4ff7-bd42-8d94b533be20?fullscreenApplet=true&showPreview=true&showAssistant=true" target="_blank" rel="noopener noreferrer">Sales Simulator Coach (Roleplay)</a>
       </div>
 
       <div id="panelDaniel" class="panel active">
         <div class="widget">
           <elevenlabs-convai agent-id="agent_8701khp52b3dfsp9t1p2dhf93j2a"></elevenlabs-convai>
-        </div>
-      </div>
-
-      <div id="panelCoach" class="panel">
-        <div class="notice">
-          Este simulador abre el roleplay de Prudential para entrenar agentes. Si no carga embebido, usa el botón para abrirlo.
-        </div>
-
-        <button class="btn" type="button" id="openCoachBtn">Abrir simulador en nueva pestaña</button>
-
-        <div class="iframeWrap" style="margin-top:12px;">
-          <iframe
-            id="coachFrame"
-            src="about:blank"
-            allow="microphone; autoplay; clipboard-read; clipboard-write"
-            referrerpolicy="no-referrer"
-          ></iframe>
-        </div>
-
-        <div class="fallback">
-          Si ves pantalla en blanco o error, Google puede estar bloqueando el embed. En ese caso usa "Abrir simulador".
         </div>
       </div>
 
@@ -157,8 +136,6 @@
 
   <script>
     (function () {
-      const coachUrl = "https://aistudio.google.com/apps/847ec397-85e5-4ff7-bd42-8d94b533be20?fullscreenApplet=true&showPreview=true&showAssistant=true";
-
       // 1) Mic permission button
       const btn = document.getElementById("enableMicBtn");
       const statusEl = document.getElementById("status");
@@ -185,40 +162,9 @@
 
       if (btn) btn.addEventListener("click", requestMicPermission);
 
-      // 2) Tabs + Coach link/iframe
-      const tabDaniel = document.getElementById("tabDaniel");
-      const tabCoach = document.getElementById("tabCoach");
+      // 2) Mostrar panel Daniel al cargar
       const panelDaniel = document.getElementById("panelDaniel");
-      const panelCoach = document.getElementById("panelCoach");
-      const openCoachBtn = document.getElementById("openCoachBtn");
-      const coachFrame = document.getElementById("coachFrame");
-
-      function setActiveTab(which) {
-        const isDaniel = which === "daniel";
-
-        if (tabDaniel) tabDaniel.classList.toggle("active", isDaniel);
-        if (tabCoach) tabCoach.classList.toggle("active", !isDaniel);
-        if (panelDaniel) panelDaniel.classList.toggle("active", isDaniel);
-        if (panelCoach) panelCoach.classList.toggle("active", !isDaniel);
-
-        // Lazy-load del iframe solo al abrir Coach
-        if (!isDaniel && coachFrame) {
-          const current = coachFrame.getAttribute("src") || "";
-          if (!current || current === "about:blank") coachFrame.setAttribute("src", coachUrl);
-        }
-      }
-
-      if (tabDaniel) tabDaniel.addEventListener("click", () => setActiveTab("daniel"));
-      if (tabCoach) tabCoach.addEventListener("click", () => setActiveTab("coach"));
-
-      if (openCoachBtn) {
-        openCoachBtn.addEventListener("click", () => {
-          window.open(coachUrl, "_blank", "noopener,noreferrer");
-        });
-      }
-
-      // Estado inicial
-      setActiveTab("daniel");
+      if (panelDaniel) panelDaniel.classList.add("active");
     })();
   </script>
 
