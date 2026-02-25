@@ -11,8 +11,6 @@
       --text:#f3f6ff;
       --muted:#b9c3e6;
       --accent:#6ea8fe;
-      --ok:#1f9d55;
-      --warn:#d69e2e;
     }
     *{box-sizing:border-box}
     body{
@@ -21,11 +19,7 @@
       background:linear-gradient(180deg,#0b1020 0%, #0f1730 100%);
       color:var(--text);
     }
-    .wrap{
-      max-width:900px;
-      margin:32px auto;
-      padding:16px;
-    }
+    .wrap{ max-width:900px; margin:32px auto; padding:16px; }
     .card{
       background:var(--card);
       border:1px solid rgba(255,255,255,.08);
@@ -33,16 +27,9 @@
       padding:20px;
       box-shadow:0 10px 30px rgba(0,0,0,.25);
     }
-    h1{
-      margin:0 0 8px 0;
-      font-size:28px;
-      line-height:1.2;
-    }
-    .sub{
-      margin:0 0 18px 0;
-      color:var(--muted);
-      font-size:16px;
-    }
+    h1{ margin:0 0 8px 0; font-size:28px; line-height:1.2; }
+    .sub{ margin:0 0 18px 0; color:var(--muted); font-size:16px; }
+
     .notice{
       background:rgba(110,168,254,.12);
       border:1px solid rgba(110,168,254,.35);
@@ -63,17 +50,12 @@
       cursor:pointer;
       font-size:15px;
     }
-    .btn:disabled{
-      opacity:.65;
-      cursor:not-allowed;
-    }
-    .status{
-      margin-top:10px;
-      font-size:14px;
-      color:var(--muted);
-    }
+    .btn:disabled{ opacity:.65; cursor:not-allowed; }
+
+    .status{ margin-top:10px; font-size:14px; color:var(--muted); }
     .status.ok{ color:#9ae6b4; }
     .status.warn{ color:#f6e05e; }
+
     .widget{
       margin-top:18px;
       min-height:120px;
@@ -82,52 +64,44 @@
       padding:12px;
       background:rgba(255,255,255,.02);
     }
-    .fallback{
-      margin-top:14px;
-      color:var(--muted);
-      font-size:13px;
-      line-height:1.45;
-    }
+    .fallback{ margin-top:14px; color:var(--muted); font-size:13px; line-height:1.45; }
     a{ color:#9ec1ff; }
-.tabs{
-    display:flex;
-    gap:10px;
-    margin:14px 0 10px 0;
-    flex-wrap:wrap;
-  }
-  .tabbtn{
-    appearance:none;
-    border:1px solid rgba(255,255,255,.14);
-    background:rgba(255,255,255,.04);
-    color:var(--text);
-    font-weight:700;
-    padding:10px 12px;
-    border-radius:12px;
-    cursor:pointer;
-    font-size:14px;
-  }
-  .tabbtn.active{
-    background:rgba(110,168,254,.18);
-    border-color:rgba(110,168,254,.55);
-  }
-  .panel{ display:none; }
-  .panel.active{ display:block; }
-  .iframeWrap{
-    margin-top:10px;
-    border:1px solid rgba(255,255,255,.10);
-    border-radius:12px;
-    overflow:hidden;
-    background:rgba(0,0,0,.15);
-  }
-  .iframeWrap iframe{
-    width:100%;
-    height:720px;
-    border:0;
-    display:block;
-  }
-  @media (max-width: 700px){
-    .iframeWrap iframe{ height: 640px; }
-  }
+
+    .tabs{ display:flex; gap:10px; margin:14px 0 10px 0; flex-wrap:wrap; }
+    .tabbtn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      font-weight:700;
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:14px;
+    }
+    .tabbtn.active{
+      background:rgba(110,168,254,.18);
+      border-color:rgba(110,168,254,.55);
+    }
+    .panel{ display:none; }
+    .panel.active{ display:block; }
+
+    .iframeWrap{
+      margin-top:10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:12px;
+      overflow:hidden;
+      background:rgba(0,0,0,.15);
+    }
+    .iframeWrap iframe{
+      width:100%;
+      height:720px;
+      border:0;
+      display:block;
+    }
+    @media (max-width: 700px){
+      .iframeWrap iframe{ height: 640px; }
+    }
   </style>
 </head>
 <body>
@@ -140,44 +114,40 @@
         Para usar la conversación por voz, permite acceso al micrófono.
       </div>
 
-      <button id="enableMicBtn" class="btn">Activar micrófono</button>
+      <button id="enableMicBtn" class="btn" type="button">Activar micrófono</button>
       <div id="status" class="status">Esperando activación de micrófono...</div>
 
       <div class="tabs">
-  <button id="tabDaniel" class="tabbtn active" type="button">Hablar con Daniel (Ventas)</button>
-  <button id="tabCoach" class="tabbtn" type="button">Sales Simulator Coach (Roleplay)</button>
-</div>
+        <button id="tabDaniel" class="tabbtn active" type="button">Hablar con Daniel (Ventas)</button>
+        <button id="tabCoach" class="tabbtn" type="button">Sales Simulator Coach (Roleplay)</button>
+      </div>
 
-<div id="panelDaniel" class="panel active">
-  <div class="widget">
-    <elevenlabs-convai agent-id="agent_8701khp52b3dfsp9t1p2dhf93j2a"></elevenlabs-convai>
-  </div>
-</div>
+      <div id="panelDaniel" class="panel active">
+        <div class="widget">
+          <elevenlabs-convai agent-id="agent_8701khp52b3dfsp9t1p2dhf93j2a"></elevenlabs-convai>
+        </div>
+      </div>
 
-<div id="panelCoach" class="panel">
-  <div class="notice">
-    Este simulador abre el roleplay de Prudential para entrenar agentes. Si no carga embebido, usa 
-el botón para abrirlo.
-  </div>
+      <div id="panelCoach" class="panel">
+        <div class="notice">
+          Este simulador abre el roleplay de Prudential para entrenar agentes. Si no carga embebido, usa el botón para abrirlo.
+        </div>
 
-  <button class="btn" type="button" id="openCoachBtn">
-    Abrir simulador en nueva pestaña
-  </button>
+        <button class="btn" type="button" id="openCoachBtn">Abrir simulador en nueva pestaña</button>
 
-  <div class="iframeWrap" style="margin-top:12px;">
-    <iframe
-      id="coachFrame"
-      src="https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20"
-      allow="microphone; autoplay; clipboard-read; clipboard-write"
-      referrerpolicy="no-referrer"
-    ></iframe>
-  </div>
+        <div class="iframeWrap" style="margin-top:12px;">
+          <iframe
+            id="coachFrame"
+            src="about:blank"
+            allow="microphone; autoplay; clipboard-read; clipboard-write"
+            referrerpolicy="no-referrer"
+          ></iframe>
+        </div>
 
-  <div class="fallback">
-    Si ves pantalla en blanco o error, Google puede estar bloqueando el embed. En ese caso usa 
-“Abrir simulador”.
-  </div>
-</div>
+        <div class="fallback">
+          Si ves pantalla en blanco o error, Google puede estar bloqueando el embed. En ese caso usa "Abrir simulador".
+        </div>
+      </div>
 
       <p class="fallback">
         Si el micrófono no funciona, abre esta página en Chrome o Safari y revisa permisos del sitio.
@@ -186,105 +156,72 @@ el botón para abrirlo.
   </main>
 
   <script>
-    const btn = document.getElementById('enableMicBtn');
-    const statusEl = document.getElementById('status');
+    (function () {
+      const coachUrl = "https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20";
 
-    async function requestMicPermission() {
-      try {
-        statusEl.textContent = 'Solicitando permiso de micrófono...';
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        stream.getTracks().forEach(t => t.stop());
-        statusEl.textContent = 'Micrófono habilitado. Ya puedes hablar con el asistente.';
-        statusEl.classList.remove('warn');
-        statusEl.classList.add('ok');
-        btn.disabled = true;
-      } catch (err) {
-        statusEl.textContent = 'Permiso denegado o bloqueado. Revisa permisos del navegador para este sitio.';
-        statusEl.classList.remove('ok');
-        statusEl.classList.add('warn');
-        console.error(err);
+      // 1) Mic permission button
+      const btn = document.getElementById("enableMicBtn");
+      const statusEl = document.getElementById("status");
+
+      async function requestMicPermission() {
+        try {
+          if (!statusEl) return;
+          statusEl.textContent = "Solicitando permiso de micrófono...";
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach((t) => t.stop());
+          statusEl.textContent = "Micrófono habilitado. Ya puedes hablar con el asistente.";
+          statusEl.classList.remove("warn");
+          statusEl.classList.add("ok");
+          if (btn) btn.disabled = true;
+        } catch (err) {
+          if (statusEl) {
+            statusEl.textContent = "Permiso denegado o bloqueado. Revisa permisos del navegador para este sitio.";
+            statusEl.classList.remove("ok");
+            statusEl.classList.add("warn");
+          }
+          console.error(err);
+        }
       }
-    }
 
-    btn.addEventListener('click', requestMicPermission);
-<script>
-  // =========================
-  // 1) Mic permission button
-  // =========================
-  const btn = document.getElementById("enableMicBtn");
-  const statusEl = document.getElementById("status");
+      if (btn) btn.addEventListener("click", requestMicPermission);
 
-  async function requestMicPermission() {
-    try {
-      if (!statusEl) return;
-      statusEl.textContent = "Solicitando permiso de micrófono...";
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true 
-});
-      stream.getTracks().forEach((t) => t.stop());
-      statusEl.textContent = "Micrófono habilitado. Ya puedes hablar con el 
-asistente.";
-      statusEl.classList.remove("warn");
-      statusEl.classList.add("ok");
-      if (btn) btn.disabled = true;
-    } catch (err) {
-      if (statusEl) {
-        statusEl.textContent =
-          "Permiso denegado o bloqueado. Revisa permisos del navegador para 
-este sitio.";
-        statusEl.classList.remove("ok");
-        statusEl.classList.add("warn");
+      // 2) Tabs + Coach link/iframe
+      const tabDaniel = document.getElementById("tabDaniel");
+      const tabCoach = document.getElementById("tabCoach");
+      const panelDaniel = document.getElementById("panelDaniel");
+      const panelCoach = document.getElementById("panelCoach");
+      const openCoachBtn = document.getElementById("openCoachBtn");
+      const coachFrame = document.getElementById("coachFrame");
+
+      function setActiveTab(which) {
+        const isDaniel = which === "daniel";
+
+        if (tabDaniel) tabDaniel.classList.toggle("active", isDaniel);
+        if (tabCoach) tabCoach.classList.toggle("active", !isDaniel);
+        if (panelDaniel) panelDaniel.classList.toggle("active", isDaniel);
+        if (panelCoach) panelCoach.classList.toggle("active", !isDaniel);
+
+        // Lazy-load del iframe solo al abrir Coach
+        if (!isDaniel && coachFrame) {
+          const current = coachFrame.getAttribute("src") || "";
+          if (!current || current === "about:blank") coachFrame.setAttribute("src", coachUrl);
+        }
       }
-      console.error(err);
-    }
-  }
 
-  if (btn) btn.addEventListener("click", requestMicPermission);
+      if (tabDaniel) tabDaniel.addEventListener("click", () => setActiveTab("daniel"));
+      if (tabCoach) tabCoach.addEventListener("click", () => setActiveTab("coach"));
 
-  // =========================
-  // 2) Tabs + Coach link/iframe
-  // =========================
-  const coachUrl = 
-"https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20";
+      if (openCoachBtn) {
+        openCoachBtn.addEventListener("click", () => {
+          window.open(coachUrl, "_blank", "noopener,noreferrer");
+        });
+      }
 
-  const tabDaniel = document.getElementById("tabDaniel");
-  const tabCoach = document.getElementById("tabCoach");
-  const panelDaniel = document.getElementById("panelDaniel");
-  const panelCoach = document.getElementById("panelCoach");
-  const openCoachBtn = document.getElementById("openCoachBtn");
-  const coachFrame = document.getElementById("coachFrame");
+      // Estado inicial
+      setActiveTab("daniel");
+    })();
+  </script>
 
-  function setActiveTab(which) {
-    const isDaniel = which === "daniel";
-
-    if (tabDaniel) tabDaniel.classList.toggle("active", isDaniel);
-    if (tabCoach) tabCoach.classList.toggle("active", !isDaniel);
-    if (panelDaniel) panelDaniel.classList.toggle("active", isDaniel);
-    if (panelCoach) panelCoach.classList.toggle("active", !isDaniel);
-
-    // Lazy-load del iframe solo al abrir Coach
-    if (!isDaniel && coachFrame) {
-      const current = coachFrame.getAttribute("src") || "";
-      if (!current || current === "about:blank") 
-coachFrame.setAttribute("src", coachUrl);
-    }
-  }
-
-  if (tabDaniel) tabDaniel.addEventListener("click", () => 
-setActiveTab("daniel"));
-  if (tabCoach) tabCoach.addEventListener("click", () => 
-setActiveTab("coach"));
-
-  if (openCoachBtn) {
-    openCoachBtn.addEventListener("click", () => {
-      window.open(coachUrl, "_blank", "noopener,noreferrer");
-    });
-  }
-
-  // Estado inicial
-  setActiveTab("daniel");
-</script>
-
-<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async 
-type="text/javascript"></script>
+  <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 </body>
 </html>
