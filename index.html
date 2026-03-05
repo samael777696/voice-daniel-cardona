@@ -261,25 +261,10 @@
         <span class="material-symbols-outlined text-slate-600 group-hover:text-[#06edf9] transition-colors" style="font-size:18px;">arrow_forward_ios</span>
       </a>
 
-      <!-- Hablar con Daniel IA -->
-      <button
-        id="openWidgetBtn"
-        type="button"
-        class="btn-primary-wrap fade-up delay-5 w-full group cursor-pointer border-0 p-0"
-      >
-        <div class="btn-primary-inner w-full flex items-center justify-between p-5">
-          <div class="flex items-center gap-4">
-            <div class="icon-circle icon-circle-primary">
-              <span class="material-symbols-outlined" style="font-size:22px; color:#050a0a;">mic</span>
-            </div>
-            <div class="flex flex-col items-start">
-              <span class="font-display font-bold text-white text-sm tracking-wide">Hablar con Daniel IA</span>
-              <span class="text-[10px] uppercase tracking-widest mt-0.5" style="color:#06edf9;">llama y resuelve tus dudas</span>
-            </div>
-          </div>
-          <span class="material-symbols-outlined transition-colors" style="font-size:20px; color:#06edf9;">bolt</span>
-        </div>
-      </button>
+      <!-- ElevenLabs Widget embebido -->
+      <div class="fade-up delay-5 w-full flex justify-center pt-2">
+        <elevenlabs-convai agent-id="agent_2801kjfz69t4fpja1vsrgqcabrns"></elevenlabs-convai>
+      </div>
 
     </main>
 
@@ -297,72 +282,6 @@
     </footer>
 
   </div>
-
-  <!-- MODAL: Daniel IA Widget -->
-  <div id="widgetModal" role="dialog" aria-modal="true" aria-label="Hablar con Daniel IA">
-    <div class="modal-box">
-
-      <div class="flex items-center gap-3 w-full">
-        <div class="icon-circle icon-circle-primary">
-          <span class="material-symbols-outlined" style="font-size:22px; color:#050a0a;">mic</span>
-        </div>
-        <div>
-          <p class="font-display font-bold text-white text-sm tracking-wide">Hablar con Daniel IA</p>
-          <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5">presiona el botón y habla</p>
-        </div>
-      </div>
-
-      <div class="hr-glow w-full"></div>
-
-      <!-- ElevenLabs Widget -->
-      <div id="danielWidget">
-        <elevenlabs-convai agent-id="agent_2801kjfz69t4fpja1vsrgqcabrns"></elevenlabs-convai>
-      </div>
-
-      <p class="text-[11px] text-slate-600 text-center leading-relaxed">
-        Activa el micrófono cuando el widget lo solicite<br>y habla directamente con Daniel IA.
-      </p>
-
-      <button
-        id="closeWidgetBtn"
-        type="button"
-        class="text-[11px] text-slate-500 hover:text-slate-300 uppercase tracking-widest transition-colors bg-transparent border-0 cursor-pointer"
-      >
-        ✕ Cerrar
-      </button>
-
-    </div>
-  </div>
-
-  <script>
-    (function () {
-      const openBtn = document.getElementById("openWidgetBtn");
-      const closeBtn = document.getElementById("closeWidgetBtn");
-      const modal = document.getElementById("widgetModal");
-
-      openBtn.addEventListener("click", () => {
-        modal.classList.add("open");
-        document.body.style.overflow = "hidden";
-        // Intentar disparar el widget automáticamente después de que cargue
-        setTimeout(() => {
-          const widget = document.querySelector("elevenlabs-convai");
-          if (widget && widget.shadowRoot) {
-            const btn = widget.shadowRoot.querySelector("button");
-            if (btn) btn.click();
-          }
-        }, 700);
-      });
-
-      closeBtn.addEventListener("click", close);
-      modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
-      document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
-
-      function close() {
-        modal.classList.remove("open");
-        document.body.style.overflow = "";
-      }
-    })();
-  </script>
 
   <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
 </body>
