@@ -1,170 +1,366 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Habla con Daniel Cardona AI</title>
+  <title>Daniel Cardona — Asesoría Financiera IA</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;700;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet">
+
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#06edf9",
+            dark: "#050a0a",
+          },
+          fontFamily: {
+            display: ["Montserrat", "sans-serif"],
+            sans: ["Inter", "sans-serif"],
+          },
+        },
+      },
+    };
+  </script>
+
   <style>
-    :root{
-      --bg:#0b1020;
-      --card:#121a33;
-      --text:#f3f6ff;
-      --muted:#b9c3e6;
-      --accent:#6ea8fe;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
-      background:linear-gradient(180deg,#0b1020 0%, #0f1730 100%);
-      color:var(--text);
-    }
-    .wrap{ max-width:900px; margin:32px auto; padding:16px; }
-    .card{
-      background:var(--card);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:16px;
-      padding:20px;
-      box-shadow:0 10px 30px rgba(0,0,0,.25);
-    }
-    h1{ margin:0 0 8px 0; font-size:28px; line-height:1.2; }
-    .sub{ margin:0 0 18px 0; color:var(--muted); font-size:16px; }
+    * { box-sizing: border-box; }
 
-    .notice{
-      background:rgba(110,168,254,.12);
-      border:1px solid rgba(110,168,254,.35);
-      color:#dbe8ff;
-      padding:12px 14px;
-      border-radius:12px;
-      margin-bottom:14px;
-      font-size:14px;
+    body {
+      background: radial-gradient(ellipse at 50% -10%, #0d2e30 0%, #050a0a 60%);
+      min-height: 100vh;
     }
-    .btn{
-      appearance:none;
-      border:none;
-      background:var(--accent);
-      color:#081027;
-      font-weight:700;
-      padding:12px 16px;
-      border-radius:12px;
-      cursor:pointer;
-      font-size:15px;
-    }
-    .btn:disabled{ opacity:.65; cursor:not-allowed; }
 
-    .status{ margin-top:10px; font-size:14px; color:var(--muted); }
-    .status.ok{ color:#9ae6b4; }
-    .status.warn{ color:#f6e05e; }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-    .widget{
-      margin-top:18px;
-      min-height:120px;
-      border:1px dashed rgba(255,255,255,.2);
-      border-radius:12px;
-      padding:12px;
-      background:rgba(255,255,255,.02);
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: background 0.2s ease, border-color 0.2s ease;
     }
-    .fallback{ margin-top:14px; color:var(--muted); font-size:13px; line-height:1.45; }
-    a{ color:#9ec1ff; }
+    .glass:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(6,237,249,0.3);
+    }
 
-    .tabs{ display:flex; gap:10px; margin:14px 0 10px 0; flex-wrap:wrap; }
-    .tabbtn{
-      appearance:none;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      font-weight:700;
-      padding:10px 12px;
-      border-radius:12px;
-      cursor:pointer;
-      font-size:14px;
+    .btn-primary-wrap {
+      position: relative;
+      border-radius: 0.875rem;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(6,237,249,0.5), #06edf9, rgba(6,237,249,0.5));
     }
-    .tabbtn.active{
-      background:rgba(110,168,254,.18);
-      border-color:rgba(110,168,254,.55);
+    .btn-primary-wrap::after {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, rgba(6,237,249,0.2), transparent, rgba(6,237,249,0.2));
+      filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
     }
-    .panel{ display:none; }
-    .panel.active{ display:block; }
+    .btn-primary-wrap:hover::after { opacity: 1; }
 
-    .iframeWrap{
-      margin-top:10px;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:12px;
-      overflow:hidden;
-      background:rgba(0,0,0,.15);
+    .btn-primary-inner {
+      background: #050a0a;
+      border-radius: calc(0.875rem - 1px);
+      transition: background 0.2s ease;
     }
-    .iframeWrap iframe{
-      width:100%;
-      height:720px;
-      border:0;
-      display:block;
+    .btn-primary-wrap:hover .btn-primary-inner {
+      background: rgba(6,237,249,0.1);
     }
-    @media (max-width: 700px){
-      .iframeWrap iframe{ height: 640px; }
+
+    .orb {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(80px);
+      pointer-events: none;
+      animation: pulse-orb 8s ease-in-out infinite alternate;
     }
+    @keyframes pulse-orb {
+      from { opacity: 0.3; transform: scale(1); }
+      to   { opacity: 0.6; transform: scale(1.15); }
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fade-up 0.7s ease both; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.25s; }
+    .delay-3 { animation-delay: 0.4s; }
+    .delay-4 { animation-delay: 0.55s; }
+    .delay-5 { animation-delay: 0.7s; }
+
+    .hr-glow {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(6,237,249,0.35), transparent);
+    }
+
+    .icon-circle {
+      width: 48px; height: 48px;
+      border-radius: 9999px;
+      background: rgba(6,237,249,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: #06edf9;
+      flex-shrink: 0;
+    }
+    .icon-circle-primary {
+      background: #06edf9;
+      color: #050a0a;
+      position: relative;
+    }
+    .icon-circle-primary::after {
+      content: "";
+      position: absolute;
+      inset: -4px;
+      border-radius: 9999px;
+      border: 1px solid rgba(6,237,249,0.4);
+      animation: pulse-ring 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse-ring {
+      0%,100% { opacity: 0.6; transform: scale(1); }
+      50%      { opacity: 0;   transform: scale(1.4); }
+    }
+
+    .logo-wrap { position: relative; overflow: hidden; }
+    .logo-wrap::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(6,237,249,0.6), transparent);
+      top: -10%;
+      animation: scan 4s ease-in-out infinite;
+    }
+    @keyframes scan {
+      0%   { top: -10%; opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { top: 110%; opacity: 0; }
+    }
+
+    /* Modal */
+    #widgetModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(5,10,10,0.88);
+      backdrop-filter: blur(10px);
+      align-items: center;
+      justify-content: center;
+    }
+    #widgetModal.open { display: flex; }
+
+    .modal-box {
+      background: #091515;
+      border: 1px solid rgba(6,237,249,0.2);
+      border-radius: 1.25rem;
+      padding: 2rem 1.5rem;
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      animation: fade-up 0.3s ease both;
+    }
+
+    #danielWidget {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    a { text-decoration: none; }
   </style>
 </head>
-<body>
-  <main class="wrap">
-    <section class="card">
-      <h1>Habla con Daniel Cardona AI</h1>
-      <p class="sub">Asesoría financiera asistida por IA</p>
 
-      <div class="notice">
-        Para usar la conversación por voz, permite acceso al micrófono.
+<body class="text-slate-100 font-sans relative overflow-x-hidden">
+
+  <div class="orb w-96 h-96 -top-32 -right-32" style="background:rgba(6,237,249,0.06);"></div>
+  <div class="orb w-80 h-80 -bottom-32 -left-32" style="background:rgba(6,200,220,0.06); animation-delay:4s;"></div>
+
+  <div class="relative z-10 flex flex-col items-center justify-between min-h-screen px-6 py-14">
+
+    <!-- HEADER -->
+    <header class="flex flex-col items-center w-full max-w-sm space-y-6">
+
+      <div class="logo-wrap w-14 h-14 fade-up delay-1">
+        <svg viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full opacity-80">
+          <polygon points="28,4 52,18 52,38 28,52 4,38 4,18" stroke="#06edf9" stroke-width="1.5" fill="none"/>
+          <polygon points="28,13 43,21.5 43,34.5 28,43 13,34.5 13,21.5" stroke="#06edf9" stroke-width="1" fill="rgba(6,237,249,0.05)"/>
+          <circle cx="28" cy="28" r="4" fill="#06edf9" opacity="0.9"/>
+        </svg>
       </div>
 
-      <button id="enableMicBtn" class="btn" type="button">Activar micrófono</button>
-      <div id="status" class="status">Esperando activación de micrófono...</div>
-
-      <div class="tabs">
-        <button id="tabDaniel" class="tabbtn active" type="button">Hablar con Daniel (Ventas)</button>
-        <a id="tabCoach" class="tabbtn" href="https://aistudio.google.com/apps/847ec397-85e5-4ff7-bd42-8d94b533be20?fullscreenApplet=true&showPreview=true&showAssistant=true" target="_blank" rel="noopener noreferrer">Sales Simulator Coach (Roleplay)</a>
+      <div class="text-center fade-up delay-2">
+        <p class="font-display font-extralight text-xl tracking-[0.5em] uppercase text-slate-400">Daniel</p>
+        <h1 class="font-display font-black text-4xl tracking-[0.25em] uppercase text-white leading-none">Cardona</h1>
+        <div class="hr-glow my-4 mx-auto w-24"></div>
+        <p class="text-[11px] text-slate-500 uppercase tracking-[0.3em] font-light leading-relaxed">
+          Asesoría financiera<br>asistida por inteligencia artificial
+        </p>
       </div>
 
-      <div id="panelDaniel" class="panel active">
-        <div class="widget">
-          <elevenlabs-convai agent-id="agent_8701khp52b3dfsp9t1p2dhf93j2a"></elevenlabs-convai>
+    </header>
+
+    <!-- BUTTONS -->
+    <main class="w-full max-w-sm flex flex-col gap-3">
+
+      <!-- Roleplay Tutor -->
+      <a
+        href="https://ai.studio/apps/847ec397-85e5-4ff7-bd42-8d94b533be20"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="glass fade-up delay-3 w-full group flex items-center justify-between p-5 rounded-[0.875rem]"
+      >
+        <div class="flex items-center gap-4">
+          <div class="icon-circle">
+            <span class="material-symbols-outlined" style="font-size:22px;">school</span>
+          </div>
+          <div class="flex flex-col items-start">
+            <span class="font-display font-bold text-white text-sm tracking-wide">Roleplay Tutor</span>
+            <span class="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5">coach conversacional</span>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-slate-600 group-hover:text-[#06edf9] transition-colors" style="font-size:18px;">arrow_forward_ios</span>
+      </a>
+
+      <!-- WhatsApp Directo -->
+      <a
+        href="https://wa.me/524771449904?text=Quiero%20asesoria%20financiera%20con%20Daniel%20Cardona"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="glass fade-up delay-4 w-full group flex items-center justify-between p-5 rounded-[0.875rem]"
+      >
+        <div class="flex items-center gap-4">
+          <div class="icon-circle">
+            <span class="material-symbols-outlined" style="font-size:22px;">chat_bubble</span>
+          </div>
+          <div class="flex flex-col items-start">
+            <span class="font-display font-bold text-white text-sm tracking-wide">WhatsApp Directo</span>
+            <span class="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5">contacto directo</span>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-slate-600 group-hover:text-[#06edf9] transition-colors" style="font-size:18px;">arrow_forward_ios</span>
+      </a>
+
+      <!-- Hablar con Daniel IA -->
+      <button
+        id="openWidgetBtn"
+        type="button"
+        class="btn-primary-wrap fade-up delay-5 w-full group cursor-pointer border-0 p-0"
+      >
+        <div class="btn-primary-inner w-full flex items-center justify-between p-5">
+          <div class="flex items-center gap-4">
+            <div class="icon-circle icon-circle-primary">
+              <span class="material-symbols-outlined" style="font-size:22px; color:#050a0a;">mic</span>
+            </div>
+            <div class="flex flex-col items-start">
+              <span class="font-display font-bold text-white text-sm tracking-wide">Hablar con Daniel IA</span>
+              <span class="text-[10px] uppercase tracking-widest mt-0.5" style="color:#06edf9;">llama y resuelve tus dudas</span>
+            </div>
+          </div>
+          <span class="material-symbols-outlined transition-colors" style="font-size:20px; color:#06edf9;">bolt</span>
+        </div>
+      </button>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="flex flex-col items-center gap-4 fade-up delay-5">
+      <div class="flex gap-6 opacity-30">
+        <span class="text-[9px] font-display tracking-[0.35em] uppercase">Cyber</span>
+        <span class="text-[9px] font-display tracking-[0.35em] uppercase">Finance</span>
+        <span class="text-[9px] font-display tracking-[0.35em] uppercase">Intelligence</span>
+      </div>
+      <div class="hr-glow w-10"></div>
+      <p class="text-[9px] text-slate-700 uppercase tracking-widest font-light">
+        © 2025 Daniel Cardona • Pro System v3.0
+      </p>
+    </footer>
+
+  </div>
+
+  <!-- MODAL: Daniel IA Widget -->
+  <div id="widgetModal" role="dialog" aria-modal="true" aria-label="Hablar con Daniel IA">
+    <div class="modal-box">
+
+      <div class="flex items-center gap-3 w-full">
+        <div class="icon-circle icon-circle-primary">
+          <span class="material-symbols-outlined" style="font-size:22px; color:#050a0a;">mic</span>
+        </div>
+        <div>
+          <p class="font-display font-bold text-white text-sm tracking-wide">Hablar con Daniel IA</p>
+          <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-0.5">presiona el botón y habla</p>
         </div>
       </div>
 
-      <p class="fallback">
-        Si el micrófono no funciona, abre esta página en Chrome o Safari y revisa permisos del sitio.
+      <div class="hr-glow w-full"></div>
+
+      <!-- ElevenLabs Widget -->
+      <div id="danielWidget">
+        <elevenlabs-convai agent-id="agent_2801kjfz69t4fpja1vsrgqcabrns"></elevenlabs-convai>
+      </div>
+
+      <p class="text-[11px] text-slate-600 text-center leading-relaxed">
+        Activa el micrófono cuando el widget lo solicite<br>y habla directamente con Daniel IA.
       </p>
-    </section>
-  </main>
+
+      <button
+        id="closeWidgetBtn"
+        type="button"
+        class="text-[11px] text-slate-500 hover:text-slate-300 uppercase tracking-widest transition-colors bg-transparent border-0 cursor-pointer"
+      >
+        ✕ Cerrar
+      </button>
+
+    </div>
+  </div>
 
   <script>
     (function () {
-      // 1) Mic permission button
-      const btn = document.getElementById("enableMicBtn");
-      const statusEl = document.getElementById("status");
+      const openBtn = document.getElementById("openWidgetBtn");
+      const closeBtn = document.getElementById("closeWidgetBtn");
+      const modal = document.getElementById("widgetModal");
 
-      async function requestMicPermission() {
-        try {
-          if (!statusEl) return;
-          statusEl.textContent = "Solicitando permiso de micrófono...";
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-          stream.getTracks().forEach((t) => t.stop());
-          statusEl.textContent = "Micrófono habilitado. Ya puedes hablar con el asistente.";
-          statusEl.classList.remove("warn");
-          statusEl.classList.add("ok");
-          if (btn) btn.disabled = true;
-        } catch (err) {
-          if (statusEl) {
-            statusEl.textContent = "Permiso denegado o bloqueado. Revisa permisos del navegador para este sitio.";
-            statusEl.classList.remove("ok");
-            statusEl.classList.add("warn");
+      openBtn.addEventListener("click", () => {
+        modal.classList.add("open");
+        document.body.style.overflow = "hidden";
+        // Intentar disparar el widget automáticamente después de que cargue
+        setTimeout(() => {
+          const widget = document.querySelector("elevenlabs-convai");
+          if (widget && widget.shadowRoot) {
+            const btn = widget.shadowRoot.querySelector("button");
+            if (btn) btn.click();
           }
-          console.error(err);
-        }
+        }, 700);
+      });
+
+      closeBtn.addEventListener("click", close);
+      modal.addEventListener("click", (e) => { if (e.target === modal) close(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+
+      function close() {
+        modal.classList.remove("open");
+        document.body.style.overflow = "";
       }
-
-      if (btn) btn.addEventListener("click", requestMicPermission);
-
-      // 2) Mostrar panel Daniel al cargar
-      const panelDaniel = document.getElementById("panelDaniel");
-      if (panelDaniel) panelDaniel.classList.add("active");
     })();
   </script>
 
